@@ -1,8 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>netcoreapp3.0</TargetFramework>
     </PropertyGroup>
     <ItemGroup>
+        <Compile Include="SharedTypes.fs" />
         <Compile Include="Login.fs" />
         <Compile Include="Home.fs" />
         <Compile Include="App.fs" />

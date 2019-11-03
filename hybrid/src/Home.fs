@@ -2,18 +2,18 @@ module Home
 
 open Elmish
 open Feliz
+open SharedTypes 
 
 type State = {
-    Username: string
-    AccessToken: string
+    CurrentUser: SignedInUser
 }
 
 type Msg =
     | Logout
     | DoNothing
 
-let init (username: string, accessToken: string) =
-    { Username = username; AccessToken = accessToken }, Cmd.none
+let init (user: SignedInUser) : State * Cmd<Msg> =
+    { CurrentUser = user }, Cmd.none
 
 let update logout msg state =
     match msg with
@@ -28,7 +28,7 @@ let render (state: State) (dispatch: Msg -> unit) =
         ]
 
         prop.children [
-            Html.h1 (sprintf "Hello %s" state.Username)
+            Html.h1 (sprintf "Hello %s" state.CurrentUser.Username)
             Html.button [
                 prop.className "btn btn-info btn-lg"
                 prop.onClick (fun _ -> dispatch Logout)
@@ -38,6 +38,12 @@ let render (state: State) (dispatch: Msg -> unit) =
     ]
 
 open Feliz.ElmishComponents
+open SharedTypes
 
-let home (props: {| user: (string * string); logout : unit -> unit |}) =
-    React.elmishComponent("Home",init props.user, update props.logout, render)
+type HomeProps = {
+    user: SignedInUser
+    logout : unit -> unit
+}
+
+let home (props: HomeProps) =
+    React.elmishComponent("Home", init props.user, update props.logout, render)

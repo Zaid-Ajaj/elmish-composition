@@ -3,12 +3,9 @@ module Login
 open System
 open Elmish
 open Feliz
+open SharedTypes
 
-/// ============ Types =================
-
-type SignedInUser =
-    { Username : string
-      AccessToken : string }
+/// ============ Types =============
 
 type LoginResult =
     | Success of user:SignedInUser
@@ -120,7 +117,7 @@ let update signedIn msg (state: State) =
 
     | LoginSuccess user ->
         let nextState = { state with LoggingIn = false }
-        nextState, Cmd.ofSub (fun _ -> signedIn (user.Username, user.AccessToken))
+        nextState, Cmd.ofSub (fun _ -> signedIn user)
 
     | LoginFailed error ->
         let nextState =
@@ -228,5 +225,7 @@ let render (state: State) (dispatch: Msg -> unit) : ReactElement =
 
 open Feliz.ElmishComponents
 
-let login (props: {| signedIn : (string * string) -> unit |}) =
+type LoginProps = { signedIn: SignedInUser -> unit }
+
+let login (props: LoginProps) =
     React.elmishComponent("Login", init(), update props.signedIn, render)
