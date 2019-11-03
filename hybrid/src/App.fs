@@ -2,6 +2,7 @@ module App
 
 open Elmish
 open SharedTypes
+open Feliz
 
 type Page =
     | Login
